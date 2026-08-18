@@ -6,10 +6,7 @@ import com.apiBase.demo.service.IProductService;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -37,4 +34,51 @@ public class ProductController {
         }
         return ResponseEntity.ok(product);
     }
+
+    @PostMapping
+    public ResponseEntity<?> createProduct(@RequestBody Product product){
+        Product productCreated = productService.createProduct(product);
+
+        if(productCreated == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se pudo crear el producto");
+//            return ResponseEntity.badRequest().body("No se pudo crear el producto");
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body("Product created successfully");
+    }
+
+    @PutMapping("/{codProduct}")
+    public ResponseEntity<?> updateProduct(@PathVariable Long codProduct,
+                                               @RequestBody Product productToUpdate){
+        Product productUpdated = productService.updateProduct(codProduct, productToUpdate);
+        if(productUpdated == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No fue posible editar el producto");
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body("Product updated successfully");
+    }
+
+    @DeleteMapping("/{codProduct}")
+    public ResponseEntity<String> deleteProduct(@PathVariable Long codProduct){
+
+        boolean deleted = productService.deleteProduct(codProduct);
+        if(deleted == false){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No fue posible editar el producto");
+        }
+        return ResponseEntity.ok("Product deleted successfully");
+
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
