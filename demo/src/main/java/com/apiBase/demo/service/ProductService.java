@@ -52,15 +52,16 @@ public class ProductService implements IProductService {
         productExists.setStock(product.getStock());
 
         return productRepository.save(productExists);
+
     }
 
     @Override
     public boolean deleteProduct(Long codProduct) {
-        Product prodExists = findProductById(codProduct);
-        if(prodExists == null){
+        Product productExists = findProductById(codProduct);
+        if(productExists == null){
             return false;
         }
-        productRepository.delete(prodExists);
+        productRepository.delete(productExists);
         return true;
     }
 }
